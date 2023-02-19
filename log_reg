@@ -1,0 +1,60 @@
+import numpy as np
+from matplotlib import pyplot as plt
+
+def sigmoid(z):
+    x = np.arange(-10,20)
+    print(x)
+    return (1/(1+np.exp(z)))
+
+
+def loss(y, y_hat):
+    return -np.mean(y*(np.log(1-y_hat) - (1-y)*np.log(1-y_hat)))
+
+def gradient(X, y, y_hat):
+    n = X.shape[0] # samples
+    dw = (1/n) * np.dot(X.T,(y_hat - y))
+    db = (1/n) * np.sum(y_hat-y)
+    return dw, db
+
+
+if __name__ == '__main__':
+    features =np.array([0.5, 1, 2, 5, 6, 7]) #nr ore de studiu pt examen
+    targets = np.array([0,0,0,1,1,1]) #0-pica, 1-trecut
+    features = features[:, np.newaxis] #newaxis pt a mai adauga o dimensiune
+    targets = targets[:, np.newaxis]
+    lr = 0.003
+    epochs = 1500
+    batch = 3
+    m, n = features.shape 
+    w = np.zeros((n,1))
+    b = 0
+    for epoch in range(epochs):
+        for i in range((m-1) // batch + 1):
+            start_i = i * batch
+            end_i = start_i + batch
+            xbatch = features[start_i : end_i]
+            ybatch = features[start_i: end_i]
+            y_hat = sigmoid(-np.dot(xbatch, w) + b)
+            dw, db = gradient(xbatch, ybatch, y_hat)
+            w -= lr * dw
+            b -= lr * db
+            l = loss(targets,sigmoid(np.dot(features, w) + b))
+#evaluare  
+         
+predictions = sigmoid(features + b)
+predictions[predictions>0.5] = 1
+predictions[predictions<0.5] = 0
+
+for pred, gr in zip(predictions, targets):
+    if gr[0] == pred[0]:
+        print("corect")
+    else:
+        print("nu")
+
+
+    
+    
+#plt.scatter(features, targets)
+#rez = sigmoid(0.5,3)
+#plt.plot(rez)
+#plt.show()

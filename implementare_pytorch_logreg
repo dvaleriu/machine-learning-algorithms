@@ -4,13 +4,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-def generate_data(number_samples = 30):
-    X = np.array(range(number_samples))
-    noise = np.random.uniform(10, 40, size = number_samples)
-    y = 3.5 * X + noise
-    return X,y
-
-
 class LogisticRegression(torch.nn.Module): #definim clasa pentru model
     def __init__(self, inputSize, outputSize):
         super(LogisticRegression, self).__init__()
@@ -23,8 +16,9 @@ class LogisticRegression(torch.nn.Module): #definim clasa pentru model
 
 x_train, y_train = generate_data(30)
 
-#batch GD, dataset mic, deci se poate 
-#prima dim - marimea batchului a doua- nr caract
+x_train =np.array([0.5, 1, 2, 5, 6, 7]) #nr ore de studiu pt examen
+y_train = np.array([0,0,0,1,1,1]) #0-pica, 1-trecut
+
 x_train = x_train[:, np.newaxis].astype(np.float32)
 y_train = y_train[:, np.newaxis].astype(np.float32)
 

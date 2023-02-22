@@ -1,0 +1,75 @@
+import torch 
+from torch.autograd import Variable
+import numpy as np
+from matplotlib import pyplot as plt
+
+
+def generate_data(number_samples = 30):
+    X = np.array(range(number_samples))
+    noise = np.random.uniform(10, 40, size = number_samples)
+    y = 3.5 * X + noise
+    return X,y
+
+
+class LogisticRegression(torch.nn.Module): #definim clasa pentru model
+    def __init__(self, inputSize, outputSize):
+        super(LogisticRegression, self).__init__()
+        self.linear = torch.nn.Linear(inputSize, outputSize) #doar un layer cu bias
+
+    def forward(self, x): # h(x) = t0 * x + t1
+        out = torch.sigmoid(self.linear(x))
+        return out
+
+
+x_train, y_train = generate_data(30)
+
+#batch GD, dataset mic, deci se poate 
+#prima dim - marimea batchului a doua- nr caract
+x_train = x_train[:, np.newaxis].astype(np.float32)
+y_train = y_train[:, np.newaxis].astype(np.float32)
+
+inputDim = 1
+outputDim = 1
+
+lr = 0.003
+epochs = 500
+
+model = LogisticRegression(inputDim, outputDim)
+
+if torch.cuda.is_available(): #pe GPU
+    model.cuda()
+
+criterion = torch.nn.BCELoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=lr) #GD
+
+losses = []
+print(x_train.shape, y_train.shape)
+
+for epoch in range(epochs):
+    if torch.cuda.is_available():
+        inputs = torch.from_numpy(x_train).cuda()
+        labels = torch.from_numpy(y_train).cuda()
+    else:
+        inputs = torch.from_numpy(x_train)
+        labels = torch.from_numpy(y_train)
+
+    outputs = model(inputs)
+    loss = criterion(outputs, labels)
+    loss.backward() # calculeaza gradientii
+    optimizer.step()#update
+    optimizer.zero_grad()
+    losses.append(loss.item())
+
+plt.title("loss")
+plt.xlabel("epoci")
+plt.ylabel("loss")
+plt.plot(losses)
+plt.show()
+
+
+
+
+
+
+
+

@@ -1,0 +1,27 @@
+import torch 
+
+class NeuralNetwork(torch.nn.Module):
+    def __init__(self):
+        super(NeuralNetwork, self).__init__()
+        self.layer1 = torch.nn.Linear(784, 128)
+        self.layer2 = torch.nn.Linear(128, 64)
+        self.layer3 = torch.nn.Linear(64, 10)
+
+        self.relu = torch.nn.ReLU()
+        self.logsoftmax = torch.nn.LogSoftmax(dim = 1)
+
+
+    
+    def forward(self, x):
+        out_layer1 = self.layer1(x)
+        out_layer1 = self.relu(out_layer1)
+
+
+        out_layer2 = self.layer2(out_layer1)
+        out_layer2 = self.relu(out_layer2)
+
+        out_final = self.layer3(out_layer2)
+        out_final = self.logsoftmax(out_final)
+
+        return out_final
+

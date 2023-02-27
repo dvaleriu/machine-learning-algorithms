@@ -1,0 +1,40 @@
+function [A] = cholesky(A)
+% o matrice simetrica pozitiv deifnita
+% suprascrie triunghiul inf a lui A cu matr L din fact Cholesky A = L*L'
+
+n=length(A);
+L=zeros(size(A));
+
+if A(1,1)<0
+    disp('A nu este pozitiv definita')
+    return
+end
+
+A(1,1)=sqrt(A(1,1)); 
+
+for i=2:n
+    A(i,1)=A(i,1)/A(1,1); % prima col din L
+end
+for k=2:n
+    s=0;
+    for l=1:k-1
+        s=s+A(k,l)*A(k,l); 
+    end
+    a=A(k,k)-s;
+    if a<=0
+        disp('A nu este pozitiv definita')
+        return
+    end
+    A(k,k)=sqrt(a); % calc elem diagonal (primul elem dif de 0 de pe diag)
+    if k==n
+        return
+    end
+    for i=k+1:n % elem sub diag
+        s=0;
+        for l=1:k-1
+            s=s+A(i,l)*A(k,l);
+        end
+        A(i,k)=(A(i,k)-s)/A(k,k);
+    end
+end
+end

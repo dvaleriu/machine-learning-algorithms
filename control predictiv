@@ -1,0 +1,159 @@
+# Bazat pe: https://osqp.org/docs/examples/mpc.html
+# =================================================
+
+import osqp
+import numpy as np
+import scipy as sp
+from scipy import sparse
+import matplotlib.pyplot as plt
+
+
+# Model reprezentat pe stare discret
+# SE COMPLETEAZA ELEMENTELE MATRICEI A
+Ad = sparse.csc_matrix([
+ [1,   0.006816,    0.09953,  0.0002295],
+ [0,     0.8633,   0.001159,     0.0954],
+ [0,     0.1329,     0.9906,   0.006816],
+ [0,      -2.67,     0.0226,     0.8633] 
+ ])
+# SE COMPLETEAZA ELEMENTELE MATRICEI B
+Bd = sparse.csc_matrix([
+  [0.004733],
+  [-0.01159],
+  [0.09424],
+  [-0.226]])
+
+
+# Componentele vectorului de stare
+#x[0] - x
+#x[1] - theta
+#x[2] - x'
+#x[3] - theta'
+
+[nx, nu] = Bd.shape
+
+
+# Constrangeri comanda, stare
+ 
+umin = np.array([-3])
+umax = np.array([ 3])
+xmin = np.array([-10, -np.pi/4 * 10, -5, -np.inf])
+xmax = np.array([ 10,  np.pi/4 * 10,  5,  np.inf])
+
+
+# Matrice penalizare
+ 
+Q = sparse.diags([1, 1, 1, 1]) 
+R = sparse.diags([2])
+
+
+# Starea initiala si de referinta
+# SE COMPLETEAZA
+x0 = np.array([1, np.pi/2, 0, 0]) 
+xr = np.array([0, 0, 0, 0])
+
+
+# Prediction horizon
+
+N = 10
+
+# Cast MPC problem to a QP: x = (x(0),x(1),...,x(N),u(0),...,u(N-1))
+# - quadratic objective
+P = sparse.block_diag([sparse.kron(sparse.eye(N), Q), Q,
+                       sparse.kron(sparse.eye(N), R)], format='csc')
+# - linear objective
+q = np.hstack([np.kron(np.ones(N), -Q.dot(xr)), -Q.dot(xr),
+               np.zeros(N*nu)])
+# - linear dynamics
+Ax = sparse.kron(sparse.eye(N+1),-sparse.eye(nx)) + sparse.kron(sparse.eye(N+1, k=-1), Ad)
+Bu = sparse.kron(sparse.vstack([sparse.csc_matrix((1, N)), sparse.eye(N)]), Bd)
+Aeq = sparse.hstack([Ax, Bu])
+leq = np.hstack([-x0, np.zeros(N*nx)])
+ueq = leq
+# - input and state constraints
+Aineq = sparse.eye((N+1)*nx + N*nu)
+lineq = np.hstack([np.kron(np.ones(N+1), xmin), np.kron(np.ones(N), umin)])
+uineq = np.hstack([np.kron(np.ones(N+1), xmax), np.kron(np.ones(N), umax)])
+# - OSQP constraints
+A = sparse.vstack([Aeq, Aineq], format='csc')
+l = np.hstack([leq, lineq])
+u = np.hstack([ueq, uineq])
+
+# Create an OSQP object
+prob = osqp.OSQP()
+
+# Setup workspace
+prob.setup(P, q, A, l, u, warm_start=True)
+
+F = []
+poz = []
+unghi = []
+vit = []
+vitungh = []
+
+# Config sim and disturbance
+nsim = 200
+tpert = 100
+pertamp = 1
+
+# Simulate in closed loop
+for i in range(nsim):
+    # Solve
+    res = prob.solve()
+
+    # Check solver status
+    if res.info.status != 'solved':
+        raise ValueError('OSQP did not solve the problem!')
+
+    # Apply first control input to the plant
+    ctrl = res.x[-N*nu:-(N-1)*nu]
+    x0 = Ad.dot(x0) + Bd.dot(ctrl)
+
+    # Apply additive output disturbance
+    if i == tpert:
+        x0[1] = x0[1] + pertamp
+
+    #save log
+    F.append(ctrl[0])
+    poz.append(x0[0])
+    unghi.append(x0[1])
+    vit.append(x0[2])
+    vitungh.append(x0[3])
+
+    # Update initial state
+    l[:nx] = -x0
+    u[:nx] = -x0
+    prob.update(l=l, u=u)
+
+
+plt.figure(1)
+plt.grid(True)
+plt.xlabel('Discrete time step (k)')
+plt.suptitle('F')
+plt.plot(F)
+
+plt.figure(2)
+plt.grid(True)
+plt.xlabel('Discrete time step (k)')
+plt.suptitle('x')
+plt.plot(poz)
+
+plt.figure(3)
+plt.grid(True)
+plt.xlabel('Discrete time step (k)')
+plt.suptitle('theta')
+plt.plot(unghi)
+
+plt.figure(4)
+plt.grid(True)
+plt.xlabel('Discrete time step (k)')
+plt.suptitle('x\'')
+plt.plot(vit)
+
+plt.figure(5)
+plt.grid(True)
+plt.xlabel('Discrete time step (k)')
+plt.suptitle('theta\'')
+plt.plot(vitungh)
+
+plt.show()

@@ -1,0 +1,30 @@
+function [A, p] = gpp(A)
+
+n=size(A);
+p=zeros(1,n);
+for k=1:n-1
+    max=abs(A(k,k));
+    p(k)=k;
+    for i=k:n
+        if abs(A(i,k))== max(abs(A(k:n,k))) 
+            p(k)=i;
+        end
+    end
+
+    for j=k:n
+        aux=A(k,j); 
+        A(k,j)=A(p(k),j);
+        A(p(k),j)=aux;
+    end
+    
+    % aplic g
+    for i=k+1:n
+        A(i,k)=A(i,k)/A(k,k);
+    end
+    for i=k+1:n
+        for j=k+1:n
+            A(i,j)=A(i,j)-A(i,k)*A(k,j);
+        end
+    end
+end
+

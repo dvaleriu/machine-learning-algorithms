@@ -1,0 +1,13 @@
+10 epochs	- acuratete destul de mica, ar trebui sa existe destui neuroni pe layere pentru a creste acuratetea
+	      	- primul strat are "greutate" mai mare fata de celelalte, daca exista mai multi neuroni pe primul strat va exista o acuratete mai buna decat daca exista mai multi neuroni pe alte straturi
+
+
+15 epochs	- la fel ca la 10 epochs, exista putin underfit, dar overall graficele de pe validation si train sunt corelate. nu pot spune acelasi lucru si din pct de vedere al covariantei, intensitatea pe validation este mai mare si exista pulsatii mai mari
+		
+30 epochs	- rezultate satisfacatoare(~40-50% acuratete) tinand cont ca lucram pe 3 canale RGB si o retea simpla, nu una specializata de ex CNN	
+		      - probabil cele mai bune rezultate luan in calcul raportul complexitate/acuratete
+
+
+50 epochs +	- in marte parte face overfit in configuratia cu 5 layere cu lr 0.03 sau 0.05-60% acuratete maxima
+
+

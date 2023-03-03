@@ -1,0 +1,6 @@
+Dupa ce aplicam kmeans pe setul de date, observam in felul urmator:
+
+1)segmentul dreapta sus: venit mare, cheltuieli mari
+2)segmnetul stanga sus: venit mic, cheltuieli mari
+3)segment dreapta jos: venit mic, cheltuieli mici
+4)segment dreapta jos: venit mare, cheltuieli mici

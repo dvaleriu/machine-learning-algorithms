@@ -1,0 +1,19 @@
+Am inceput de la un model parsimonios, avand initial 2 layere de convolutie + 1 de clasificare MLP. Am crescut gradat complexitatea modelului. Initial, metrica de acuratete indica ~50-60% performanta. Adaugand layere precum si neuroni, aceasta metrica a crescut, ajungand in momentul de fata a avea ~85% acuratete. 
+Evolutia a fost astfel: 2CNN(8,16) + 1 CLAS = ~50% acuratete
+			2CNN(8,16) + 2 CLAS = ~50% acuratete(nu afecteaza foarte mult faptul ca adaug layere in plus pentru clasificare, observ mai jos faptul ca acestea au impact mai mare daca sunt treute drept layere de convolutie)
+			2CNN(3,16,1 + 16,32,1) + 1 CLAS = ~50% acuratete(mai bun fata de cel de mai sus, dar superficial)
+			4CNN(16,32,32,64) + 2 CLAS = ~55-60 acuratete
+			3CNN(64,128,256) + 3 CLAS = ~60+ acuratete
+			5CNN(64,128,128,256,512) + 3 CLAS = ~65- acuratete -> din acest punct nu am mai adugat layere de clasificare, am facut mai multe teste punand layerul pe clasificare precum si pe conv si am observat ca este mai profitabil sa pun layerul pe conv, atat dpdv al performantei cat si dpdv al costului computational
+			5CNN(64,128,256,256,512) + 3 CLAS = aproximativ ca mai sus, in schimb mai putin robust
+			6CNN(64,128,256,256,512,512) + 3 CLAS = ~70-, mai bun ca cele de mai sus, dar tot nesatisfacator
+			-----------------------------------------------
+			PANA IN ACEST MOMENT MODELELE AU FACUT UNDERFIT, DESI AM MARIT CONSTANT NUMARUL DE PARAMETRI AI RETELELOR
+			-----------------------------------------------
+			7CNN(64,128,256,256,512,512,1024)+ 3 CLAS = ~85 acuratete, cel ales de catre mine care a parut a fi cel mai bun avand in vedere raportul complexitate/underfit(desi din acest punct modelul incepe sa faca overfit din ce in ce mai mult)
+			7CNN(128,128,256,512,512,1024,1024) + 3 CLAS = ~85+
+			8CNN(128,128,256,512,512,1024,2048) + 3 CLAS = ~87
+			------------------------------------------------
+			OVERFIT
+			-------------------------------------------------
+			 

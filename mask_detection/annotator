@@ -1,3 +1,7 @@
+########################################################
+#arhitectura: YOLO
+#link : https://github.com/sthanhng/yoloface 
+
 import sys
 import os
 import cv2

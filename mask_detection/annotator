@@ -40,7 +40,7 @@ net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
 net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 
 #pentru stream capture
-cap = cv2.VideoCapture(0) #device 0-laptop
+cap = cv2.VideoCapture(0) #device 0-camera laptop
 while True:
     has_frame, frame = cap.read() #are frame, frameul anume
     key = cv2.waitKey(1) & 0xFF #cand apas pe o tasta sa se ia cadrul

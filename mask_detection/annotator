@@ -1,6 +1,13 @@
 ########################################################
-#arhitectura: YOLO
+
+
+#CREARE DATASET PROPRIU
+#detectare fata folosind camera web + capturi + salvare capturi
+
+#arhitectura: YOLO v3
 #link : https://github.com/sthanhng/yoloface 
+
+
 
 import sys
 import os

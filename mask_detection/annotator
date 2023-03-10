@@ -1,0 +1,84 @@
+import sys
+import os
+import cv2
+from utils import get_outputs_names, post_process
+import secrets
+
+#constantele
+CONF_THRESHOLD = 0.5
+NMS_THRESHOLD = 0.4
+
+#parametri
+imagini = 0
+crop_aditional_yjos = 70
+crop_aditional_ysus = 30
+crop_aditional_x = 35
+
+IMG_WIDTH = 416
+IMG_HEIGHT = 416
+
+#inputuri
+model_config = './cfg/yolov3-face.cfg' #scris in darknet
+model_weights = './model-weights/yolov3-wider_16000.weights' 
+output_path = r"D:\faia\codcurs\yoloface\dataset\masca"
+
+
+#initializare model
+net = cv2.dnn.readNetFromDarknet(model_config, model_weights)
+net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
+net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
+
+#pentru stream capture
+cap = cv2.VideoCapture(0) #device 0-laptop
+while True:
+    has_frame, frame = cap.read() #are frame, frameul anume
+    key = cv2.waitKey(1) & 0xFF #cand apas pe o tasta sa se ia cadrul
+
+    #YOLO DETECTIE
+    # Create a 4D blob from a frame.
+    blob = cv2.dnn.blobFromImage(frame, 1 / 255, (IMG_WIDTH, IMG_HEIGHT),
+                                     [0, 0, 0], 1, crop=False)
+    net.setInput(blob)
+    outs = net.forward(get_outputs_names(net))
+    faces = post_process(frame, outs, CONF_THRESHOLD, NMS_THRESHOLD) #postprocesare
+    ########################################################################
+    
+    #daca exista fete
+    if faces:
+        #print('d')
+        leftTopX = faces[0][0]
+        leftTopY = faces[0][1]
+
+
+        rightTopX = leftTopX + faces[0][2]
+        rightTopY = leftTopY + faces[0][3]
+
+        #crop pe fata
+        my_face = frame[leftTopY - crop_aditional_yjos :rightTopY + crop_aditional_ysus, leftTopX - crop_aditional_x:rightTopX + crop_aditional_x]
+       
+
+        if 0 not in my_face.shape: #pt iesirea fetei din camera
+            cv2.imshow("My face", my_face)
+
+            #pentru salvare de imagine
+            if key == ord("r"): #unicode
+                print("S a salvat imagea")
+
+                save_path = os.path.join(output_path, secrets.token_hex(5)+".png")
+                cv2.imwrite(save_path, my_face)
+                imagini += 1
+                print("S a salvat o imagine. Imagini salvata {imagini}")
+
+            #cv2.imshow("My face", my_face)
+
+    #exit    
+    if key == ord("q"):
+        break
+
+
+    cv2.imshow("Frame", frame)
+
+cap.release()
+cv2.destroyAllWindows()
+
+

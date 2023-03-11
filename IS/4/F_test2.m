@@ -23,10 +23,6 @@ function [na,nb] = F_test2(Lambda,N)
 %               structural indices result by decrementing 
 %               na and nb with 1. 
 %
-% Author:   Dan Stefanoiu (*)
-% Revised:  Dan Stefanoiu (*)
-%
-% Last upgrade: March 17, 2004
 %
 % Copyright: (*) "Politehnica" Unversity of Bucharest, ROMANIA
 %                Department of Automatic Control & Computer Science

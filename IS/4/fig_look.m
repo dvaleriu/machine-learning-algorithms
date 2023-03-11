@@ -11,13 +11,6 @@
 %	and non-empty stands for the desired line width of graphics. 
 %	By default, lw=0.5. Normally, lw should be non-negative. 
 %
-%	Uses:	 
-%
-%	Author:	 Dan STEFANOIU
-%   2nd Revisor: Lavinius Ioan GLIGA
-%	Created: November 1, 2002
-%	Updated: October 27, 2008
-%            February 26, 2018
 %
 
 function fig_look(H,lw) 

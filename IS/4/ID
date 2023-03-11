@@ -1,0 +1,57 @@
+function [theta] = id_student(Data, na, nb, nk)
+N =250;
+%fi 
+intrari = Data.u;
+iesiri = Data.y;
+intrari_prima_jum = -iesiri(end-1:-1:end-na)
+intrari_2jum= intrari(end-1:-1:end-nb)
+fi = [intrari_prima_jum; intrari_2jum];
+fi = fi';
+model_aux = arx(Data, [na nb nk]);
+intrari_filtrate = filter(-model_aux.b, model_aux.a, intrari);
+%intrari_filtrate = intrari_filtrate./sqrt(ones(N,1)*sum(intrari_filtrate.*intrari_filtrate)/N) ;
+intrari_filtrate = intrari_filtrate(end-1:-1:end-na)
+z = [intrari_filtrate; intrari(end-1:-1:end-nb)];
+%priam suma
+S = 0
+for k = 1:N
+    for i = 1:length(z)-1
+        for j =1:length(fi)-1
+            R(i,j) =   z(i+1) * fi(j+1);
+        end
+    end
+    S = S+R;
+end
+
+S = 1/N * S
+det(S)
+%R = z(2:end) * fi(2:end);
+%R = 1/(length(z)-1) * R
+% a doua suma
+rs = zeros(1,length(z)-1);
+
+for k = 1:N
+    for i =1 : length(z)-1
+        r(i) = z(i+1) * Data.y(i+1);
+    end
+    rs = rs+r;
+end
+rs = 1/N * rs
+rs= rs';
+% theta
+theta = rs\S;
+theta = theta'
+%lambda
+lambda = 0;
+for k = 1:N
+    for i = 1:length(fi)
+        s = 0;
+        s = Data.y(i) - fi(i)*theta;
+     
+    end
+    lambda = lambda + s;
+end
+lambda = 1/N * lambda;
+Mid = idpoly()
+
+end

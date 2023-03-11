@@ -10,12 +10,6 @@
 %	Otherwise (missing or void), a standard error 
 %	message is displayed. 
 %
-%	Author:  Dan Stefanoiu
-%   2nd Revisor: Lavinius Ioan Gliga
-%	Created: June       2, 1999
-%	Revised: September 22, 2007
-%            February  26, 2018
-%
 
 function war_err(msg)
 

@@ -35,13 +35,6 @@ function [D,V,P] = gendata(A,B,C,nk,N,sigma,lambda)
 %               various processes can be used, by setting sigma 
 %               and/or lambda to null. 
 %
-% Author:   Helena Haglund (*)
-%           Bjorn Wittenmark (*)
-% Revised:  Dan Stefanoiu (**)
-%
-% Last upgrade: (*)  January  5, 1997
-%               (**) March   17, 2004
-%
 % Copyright: (*)  Lund Institute of Technology, SWEDEN
 %                 Department of Automatic Control
 %            (**) "Politehnica" Unversity of Bucharest, ROMANIA

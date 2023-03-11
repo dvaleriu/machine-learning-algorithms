@@ -19,9 +19,6 @@
 %               is considered. Note that the structural indices 
 %               result by decrementing na and nb with 1. 
 %
-% Author:   Dan Stefanoiu (*)
-% Revised:  Dan Stefanoiu (*)
-%           Lavinius Ioan Gliga (*)
 %
 % Created: January  12, 2016
 % Revised: November 24, 2020

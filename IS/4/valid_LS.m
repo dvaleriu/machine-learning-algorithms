@@ -19,11 +19,6 @@ function vi = valid_LS(Model,Data)
 %               to provide the validity index. See theory for 
 %               more details. 
 %
-% Author:   Dan Stefanoiu (*)
-% Revised:  Dan Stefanoiu (*)
-%
-% Last upgrade: March 13, 2004
-%
 % Copyright: (*) "Politehnica" Unversity of Bucharest, ROMANIA
 %                Department of Automatic Control & Computer Science
 %

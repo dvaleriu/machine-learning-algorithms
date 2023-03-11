@@ -29,12 +29,6 @@ function [Mid,Did,Dva] = ISLAB_5A(A,B,C,nk,N,sigma,lambda)
 %               consistent, but not the most efficient 
 %               (i.e. the convergence speed is not the best). 
 %
-% Author:   Dan Stefanoiu (*)
-% Revised:  Dan Stefanoiu (*)
-%
-% Created: March 16, 2004
-% Revised: January 22, 2012
-%
 % Copyright: (*) "Politehnica" Unversity of Bucharest, ROMANIA
 %                Department of Automatic Control & Computer Science
 %

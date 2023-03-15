@@ -1,0 +1,4 @@
+1. Run Split train-test-validation
+2. Run preprocess
+3. Run train(train/val)
+4. Run test 

@@ -30,7 +30,7 @@ torch.manual_seed(manualSeed)
 print("Random seed:", manualSeed)
 
 #inputs
-dataroot = r"D:\faia\codcurs\detectaremasca\Data\asd"
+dataroot = r"D:\faia\cod\detectaremasca\Data\asd"
 batch_size = 64
 image_size = 64
 

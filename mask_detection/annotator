@@ -31,7 +31,7 @@ IMG_HEIGHT = 416
 #inputuri
 model_config = './cfg/yolov3-face.cfg' #scris in darknet
 model_weights = './model-weights/yolov3-wider_16000.weights' 
-output_path = r"D:\faia\codcurs\yoloface\dataset\masca"
+output_path = r"D:\faia\cods\yoloface\dataset\masca"
 
 
 #initializare model
